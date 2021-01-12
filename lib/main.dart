@@ -1,3 +1,5 @@
+import 'package:SayHi/screens/chat_screen.dart';
+
 import './screens/auth_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -12,9 +14,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.orange,
-        primaryColor: Colors.orange,
-        accentColor: Colors.orangeAccent,
+        primarySwatch: Colors.lightGreen,
+        primaryColor: Colors.lightGreen,
+        accentColor: Colors.greenAccent,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: AuthenticationScreen(),
