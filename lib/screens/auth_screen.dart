@@ -7,10 +7,16 @@ class AuthenticationScreen extends StatefulWidget {
 }
 
 class _AuthenticationScreenState extends State<AuthenticationScreen> {
+  void sendAuthData(
+    String email,
+    String username,
+    String password,
+    bool isLogin,
+  ) {}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AuthWidget(),
+      body: AuthWidget(sendAuthData),
     );
   }
 }

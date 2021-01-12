@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 
 class AuthWidget extends StatefulWidget {
+  AuthWidget(this.formSubmit);
+
+  final void Function(
+    String email,
+    String username,
+    String password,
+    bool isLoginScreen,
+  ) formSubmit;
   @override
   _AuthWidgetState createState() => _AuthWidgetState();
 }
@@ -22,9 +29,12 @@ class _AuthWidgetState extends State<AuthWidget> {
 
     if (isValid) {
       _formKey.currentState.save();
-      print(userName);
-      print(userPassword);
-      print(userEmail);
+      widget.formSubmit(
+        userEmail,
+        userName,
+        userPassword,
+        _isLogin,
+      );
     }
   }
 
