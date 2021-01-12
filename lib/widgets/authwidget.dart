@@ -8,6 +8,7 @@ class AuthWidget extends StatefulWidget {
     String username,
     String password,
     bool isLoginScreen,
+    BuildContext ctx,
   ) formSubmit;
   @override
   _AuthWidgetState createState() => _AuthWidgetState();
@@ -30,10 +31,11 @@ class _AuthWidgetState extends State<AuthWidget> {
     if (isValid) {
       _formKey.currentState.save();
       widget.formSubmit(
-        userEmail,
-        userName,
+        userEmail.trim(),
+        userName.trim(),
         userPassword,
         _isLogin,
+        context,
       );
     }
   }
@@ -220,7 +222,7 @@ class _AuthWidgetState extends State<AuthWidget> {
                       child: TextFormField(
                         key: ValueKey('confirmpassword'),
                         validator: (value) {
-                          if (value.isEmpty || value != userPassword) {
+                          if (value.isEmpty) {
                             return "Password does not match";
                           }
                           return null;
@@ -263,7 +265,7 @@ class _AuthWidgetState extends State<AuthWidget> {
                         borderRadius: BorderRadius.circular(20.0)),
                     onPressed: _trySubmit,
                     child: Text(
-                      (_isLogin) ? 'Create My Account' : 'Start Chatting',
+                      (_isLogin) ? 'Start Chatting' : 'Create My Account',
                       style: TextStyle(fontSize: 16),
                     ),
                   ),
