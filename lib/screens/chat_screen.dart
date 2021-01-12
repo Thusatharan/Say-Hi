@@ -1,14 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 
 class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        brightness: Brightness.light,
-        title: Text('Chat Screeen'),
+        elevation: 5,
+        title: Text('Thusanth'),
         actions: [
           DropdownButton(
             icon: Icon(
@@ -21,6 +22,9 @@ class ChatScreen extends StatelessWidget {
                   child: Row(
                     children: [
                       Icon(Icons.logout),
+                      SizedBox(
+                        width: 10,
+                      ),
                       Text('Logout'),
                     ],
                   ),
@@ -37,9 +41,7 @@ class ChatScreen extends StatelessWidget {
         ],
       ),
       body: StreamBuilder(
-        stream: Firestore.instance
-            .collection('chat/HWuBCPfDbe8PckXsHUuo/messages')
-            .snapshots(),
+        stream: Firestore.instance.collection('chat').snapshots(),
         builder: (ctx, streamSnapshot) {
           if (streamSnapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -51,10 +53,17 @@ class ChatScreen extends StatelessWidget {
           return ListView.builder(
             itemCount: documents.length,
             itemBuilder: (ctx, index) => Container(
+              decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColorLight,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20),
+                      topRight: Radius.circular(20))),
               padding: EdgeInsets.all(10),
+              margin: EdgeInsets.all(10),
               child: Text(
                 documents[index]['text'],
-                style: TextStyle(fontSize: 25),
+                style: TextStyle(fontSize: 12),
               ),
             ),
           );
@@ -64,7 +73,7 @@ class ChatScreen extends StatelessWidget {
         child: Icon(Icons.add),
         onPressed: () {
           Firestore.instance
-              .collection('chat/HWuBCPfDbe8PckXsHUuo/messages')
+              .collection('chat')
               .add({'text': 'Pressed Add Button'});
         },
       ),

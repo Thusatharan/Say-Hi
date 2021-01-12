@@ -43,30 +43,19 @@ class _AuthWidgetState extends State<AuthWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Stack(
-            alignment: AlignmentDirectional.center,
-            children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage('assets/images/hanging.png'),
-                        fit: BoxFit.cover)),
-                height: 250,
-                width: double.infinity,
-              ),
-              Center(
-                child: Text(
-                  'Say Hi',
-                  style:
-                      TextStyle(color: Colors.lightGreenAccent, fontSize: 50),
-                ),
-              ),
-            ],
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage('assets/images/hangingname.png'),
+                    fit: BoxFit.cover)),
+            width: double.infinity,
           ),
-          Form(
+        ),
+        Expanded(
+          child: Form(
             key: _formKey,
             child: Column(
               children: [
@@ -280,20 +269,20 @@ class _AuthWidgetState extends State<AuthWidget> {
               ],
             ),
           ),
-          if (!widget.isLoading)
-            FlatButton(
-              child: Text(
-                (_isLogin) ? 'Create New Account' : 'Already have account',
-                style: TextStyle(color: Theme.of(context).primaryColorDark),
-              ),
-              onPressed: () {
-                setState(() {
-                  _isLogin = !_isLogin;
-                });
-              },
-            )
-        ],
-      ),
+        ),
+        if (!widget.isLoading)
+          FlatButton(
+            child: Text(
+              (_isLogin) ? 'Create New Account' : 'Already have account',
+              style: TextStyle(color: Theme.of(context).primaryColorDark),
+            ),
+            onPressed: () {
+              setState(() {
+                _isLogin = !_isLogin;
+              });
+            },
+          )
+      ],
     );
   }
 }
