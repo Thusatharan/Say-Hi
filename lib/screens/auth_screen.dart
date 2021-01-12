@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +11,7 @@ class AuthenticationScreen extends StatefulWidget {
 
 class _AuthenticationScreenState extends State<AuthenticationScreen> {
   final _authentication = FirebaseAuth.instance;
+  var _isLoading = false;
 
   void sendAuthData(
     String email,
@@ -21,12 +23,22 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
     AuthResult _authData;
 
     try {
+      setState(() {
+        _isLoading = true;
+      });
       if (isLogin) {
         _authData = await _authentication.signInWithEmailAndPassword(
             email: email, password: password);
       } else {
         _authData = await _authentication.createUserWithEmailAndPassword(
             email: email, password: password);
+        await Firestore.instance
+            .collection('users')
+            .document(_authData.user.uid)
+            .setData({
+          'username': username,
+          'email': email,
+        });
       }
     } on PlatformException catch (error) {
       var errMessage = "An Error Occured, Please check your Email and Password";
@@ -39,15 +51,21 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
           backgroundColor: Theme.of(ctx).primaryColor,
         ),
       );
+      setState(() {
+        _isLoading = false;
+      });
     } catch (error) {
       print(error);
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AuthWidget(sendAuthData),
+      body: AuthWidget(sendAuthData, _isLoading),
     );
   }
 }

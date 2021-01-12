@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AuthWidget extends StatefulWidget {
-  AuthWidget(this.formSubmit);
+  AuthWidget(this.formSubmit, this.isLoading);
 
+  final bool isLoading;
   final void Function(
     String email,
     String username,
@@ -255,35 +256,42 @@ class _AuthWidgetState extends State<AuthWidget> {
                       ),
                     ),
                   ),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(horizontal: 60, vertical: 10),
-                  child: RaisedButton(
-                    color: Theme.of(context).primaryColor,
-                    textColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0)),
-                    onPressed: _trySubmit,
-                    child: Text(
-                      (_isLogin) ? 'Start Chatting' : 'Create My Account',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ),
-                ),
+                (widget.isLoading)
+                    ? Container(
+                        margin: EdgeInsets.only(top: 10),
+                        child: CircularProgressIndicator(),
+                      )
+                    : Container(
+                        width: double.infinity,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 60, vertical: 10),
+                        child: RaisedButton(
+                          color: Theme.of(context).primaryColor,
+                          textColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0)),
+                          onPressed: _trySubmit,
+                          child: Text(
+                            (_isLogin) ? 'Start Chatting' : 'Create My Account',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ),
               ],
             ),
           ),
-          FlatButton(
-            child: Text(
-              (_isLogin) ? 'Create New Account' : 'Already have account',
-              style: TextStyle(color: Theme.of(context).primaryColorDark),
-            ),
-            onPressed: () {
-              setState(() {
-                _isLogin = !_isLogin;
-              });
-            },
-          )
+          if (!widget.isLoading)
+            FlatButton(
+              child: Text(
+                (_isLogin) ? 'Create New Account' : 'Already have account',
+                style: TextStyle(color: Theme.of(context).primaryColorDark),
+              ),
+              onPressed: () {
+                setState(() {
+                  _isLogin = !_isLogin;
+                });
+              },
+            )
         ],
       ),
     );
