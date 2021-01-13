@@ -1,3 +1,4 @@
+import 'package:SayHi/widgets/create_message_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -40,43 +41,56 @@ class ChatScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: StreamBuilder(
-        stream: Firestore.instance.collection('chat').snapshots(),
-        builder: (ctx, streamSnapshot) {
-          if (streamSnapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+      body: Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/images/leaf.png'), fit: BoxFit.fill)),
+        child: Column(
+          children: [
+            Expanded(
+              child: StreamBuilder(
+                stream: Firestore.instance.collection('chat').snapshots(),
+                builder: (ctx, streamSnapshot) {
+                  if (streamSnapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
 
-          final documents = streamSnapshot.data.documents;
-          return ListView.builder(
-            itemCount: documents.length,
-            itemBuilder: (ctx, index) => Container(
-              decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColorLight,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
-                      topRight: Radius.circular(20))),
-              padding: EdgeInsets.all(10),
-              margin: EdgeInsets.all(10),
-              child: Text(
-                documents[index]['text'],
-                style: TextStyle(fontSize: 12),
+                  final documents = streamSnapshot.data.documents;
+                  return ListView.builder(
+                    itemCount: documents.length,
+                    itemBuilder: (ctx, index) => Container(
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColorLight,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              bottomRight: Radius.circular(20),
+                              topRight: Radius.circular(20))),
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.all(10),
+                      child: Text(
+                        documents[index]['text'],
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
-          );
-        },
+            CreateNewMessage(),
+          ],
+        ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          Firestore.instance
-              .collection('chat')
-              .add({'text': 'Pressed Add Button'});
-        },
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   child: Icon(Icons.add),
+      //   onPressed: () {
+      //     Firestore.instance
+      //         .collection('chat')
+      //         .add({'text': 'Pressed Add Button'});
+      //   },
+      // ),
     );
   }
 }
