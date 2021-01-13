@@ -49,7 +49,10 @@ class ChatScreen extends StatelessWidget {
           children: [
             Expanded(
               child: StreamBuilder(
-                stream: Firestore.instance.collection('chat').snapshots(),
+                stream: Firestore.instance
+                    .collection('chat')
+                    .orderBy('createdAt', descending: true)
+                    .snapshots(),
                 builder: (ctx, streamSnapshot) {
                   if (streamSnapshot.connectionState ==
                       ConnectionState.waiting) {
@@ -60,20 +63,26 @@ class ChatScreen extends StatelessWidget {
 
                   final documents = streamSnapshot.data.documents;
                   return ListView.builder(
+                    reverse: true,
                     itemCount: documents.length,
-                    itemBuilder: (ctx, index) => Container(
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColorLight,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              bottomRight: Radius.circular(20),
-                              topRight: Radius.circular(20))),
-                      padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.all(10),
-                      child: Text(
-                        documents[index]['text'],
-                        style: TextStyle(fontSize: 12),
-                      ),
+                    itemBuilder: (ctx, index) => Row(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColorDark,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  bottomRight: Radius.circular(20),
+                                  topRight: Radius.circular(20))),
+                          padding: EdgeInsets.all(10),
+                          margin: EdgeInsets.all(5),
+                          width: 150,
+                          child: Text(
+                            documents[index]['text'],
+                            style: TextStyle(fontSize: 12, color: Colors.white),
+                          ),
+                        ),
+                      ],
                     ),
                   );
                 },

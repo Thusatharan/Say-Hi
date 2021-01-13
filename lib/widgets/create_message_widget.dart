@@ -9,14 +9,17 @@ class CreateNewMessage extends StatefulWidget {
 
 class _CreateNewMessageState extends State<CreateNewMessage> {
   var _newMessage = '';
+  final _textController = TextEditingController();
 
   void _sendText() {
     FocusScope.of(context).unfocus();
     Firestore.instance.collection('chat').add(
       {
         'text': _newMessage,
+        'createdAt': Timestamp.now(),
       },
     );
+    _textController.clear();
   }
 
   @override
@@ -32,6 +35,7 @@ class _CreateNewMessageState extends State<CreateNewMessage> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15)),
               child: TextField(
+                controller: _textController,
                 cursorWidth: 1,
                 cursorHeight: 20,
                 cursorColor: Theme.of(context).primaryColor,
@@ -50,7 +54,7 @@ class _CreateNewMessageState extends State<CreateNewMessage> {
           IconButton(
               color: Theme.of(context).primaryColorDark,
               icon: Icon(
-                Icons.send,
+                Icons.send_rounded,
                 size: 30,
               ),
               onPressed: _newMessage.trim().isEmpty ? null : _sendText),
